@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-header text-white bg-info">S'enregistrer</div>
   <div class="card-body">
-    <form (ngSubmit)="saveData(registerForm)" #registerForm="ngForm">
+    <form novalidate (ngSubmit)="saveData(registerForm)" #registerForm="ngForm">
       <div class="row">
         <div class="col-md-6 mb-3">
           <label>Nom</label>
@@ -11,7 +11,19 @@
             placeholder="Nom"
             [(ngModel)]="user.lastName"
             name="lastName"
+            required
+            minlength="4"
+            #lastNameVar="ngModel"
+            [ngClass]="{
+              'is-invalid': lastNameVar.touched && !lastNameVar.valid
+            }"
           />
+          <div class="invalid-feedback">
+            <span *ngIf="lastNameVar.errors?.required">Entrez votre nom!</span>
+            <span *ngIf="lastNameVar.errors?.minlength"
+              >Minimum 4 caratcères!</span
+            >
+          </div>
         </div>
         <div class="col-md-6 mb-3">
           <label>Prenom</label>
@@ -21,7 +33,21 @@
             placeholder="Prenom"
             [(ngModel)]="user.firstName"
             name="fistName"
+            required
+            maxlength="20"
+            #firstNameVar="ngModel"
+            [ngClass]="{
+              'is-invalid': firstNameVar.touched && !firstNameVar.valid
+            }"
           />
+          <div class="invalid-feedback">
+            <span *ngIf="firstNameVar.errors?.required"
+              >Entrez votre prenom!</span
+            >
+            <span *ngIf="firstNameVar.errors?.maxlength"
+              >Minimum 4 caratcères!</span
+            >
+          </div>
         </div>
       </div>
       <div class="row">
@@ -33,7 +59,17 @@
             placeholder="E-mail"
             [(ngModel)]="user.email"
             name="email"
+            required
+            email
+            #emailVar="ngModel"
+            [ngClass]="{
+              'is-invalid': emailVar.touched && !emailVar.valid
+            }"
           />
+          <div class="invalid-feedback">
+            <span *ngIf="emailVar.errors?.required">Entrez votre email!</span>
+            <span *ngIf="emailVar.errors?.email">Email non valide!</span>
+          </div>
         </div>
       </div>
       <div class="float-end">
