@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validator, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { User } from './user';
 
+import {debounceTime} from 'rxjs/operators';
+
 function ratingRangeValidator(min: number, max:number): ValidatorFn {
   return (c: AbstractControl): { [key: string]: boolean } |  null => {
     if(!!c.value && (isNaN(c.value) || c.value < min || c.value > max)) {
@@ -66,17 +68,24 @@ export class RegisterComponent implements OnInit {
       }),
       notification: 'email',
       rating: [null, [ratingRangeValidator]],
-      sendCatalog: false
+      sendCatalog: true,
+      addressType: ['home'],
+      street1: [''],
+      street2: [''],
+      city: [''],
+      state: [''],
+      zip: [''],
     })
 
     this.registerForm.get('notification')?.valueChanges.subscribe(value => {
       this.setNotificationSetting(value);
-      console.log(value);
+      //console.log(value);
     })
 
     const emailControl = this.registerForm.get('emailGroup.email');
-    emailControl?.valueChanges.subscribe(val => {
-      console.log(val);
+    emailControl?.valueChanges.pipe().subscribe(val => {
+      debounceTime(1000);
+      //console.log(val);
       this.setMessage(emailControl);
     })
   }
