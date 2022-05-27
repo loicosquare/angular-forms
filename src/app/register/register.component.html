@@ -1,25 +1,45 @@
 <div class="card">
-  <div class="card-header tex-white bg-info">S'enregistrer</div>
+  <div class="card-header text-white bg-info">S'enregistrer</div>
   <div class="card-body">
-    <form>
+    <form (ngSubmit)="saveData(registerForm)" #registerForm="ngForm">
       <div class="row">
         <div class="col-md-6 mb-3">
           <label>Nom</label>
-          <input type="text" class="form-control" placeholder="Nom" />
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Nom"
+            [(ngModel)]="user.lastName"
+            name="lastName"
+          />
         </div>
         <div class="col-md-6 mb-3">
           <label>Prenom</label>
-          <input type="text" class="form-control" placeholder="Prenom" />
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Prenom"
+            [(ngModel)]="user.firstName"
+            name="fistName"
+          />
         </div>
       </div>
       <div class="row">
         <div class="col-md-6 mb-3">
           <label>Email</label>
-          <input type="email" class="form-control" placeholder="E-mail" />
+          <input
+            type="email"
+            class="form-control"
+            placeholder="E-mail"
+            [(ngModel)]="user.email"
+            name="email"
+          />
         </div>
       </div>
       <div class="float-end">
-        <button class="btn btn-info">Sauvegarder</button>
+        <button class="btn btn-info text-white" type="submit">
+          Sauvegarder
+        </button>
       </div>
     </form>
   </div>
