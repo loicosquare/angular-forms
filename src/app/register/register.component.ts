@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 /* import { NgForm } from '@angular/forms'; */
-import { FormGroup, FormBuilder, Validator, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormBuilder, Validator, Validators, AbstractControl, ValidatorFn, FormArray } from '@angular/forms';
 import { User } from './user';
 
 import {debounceTime} from 'rxjs/operators';
@@ -69,12 +69,7 @@ export class RegisterComponent implements OnInit {
       notification: 'email',
       rating: [null, [ratingRangeValidator]],
       sendCatalog: true,
-      addressType: ['home'],
-      street1: [''],
-      street2: [''],
-      city: [''],
-      state: [''],
-      zip: [''],
+      addresses: this.fb.array([this.createAddressGroup()])
     })
 
     this.registerForm.get('notification')?.valueChanges.subscribe(value => {
@@ -123,5 +118,21 @@ export class RegisterComponent implements OnInit {
       ).join('');*/
       console.log(Object.keys(val.errors));
     }
+  }
+
+  private createAddressGroup(): FormGroup{
+    return this.fb.group({
+      addressType: ['home'],
+      street1: [''],
+      street2: [''],
+      city: [''],
+      state: [''], 
+      zip: [''],
+    })
+  }
+
+  //To solve index signature problem
+  get addressesFormGroups (): FormArray {
+    return this.registerForm?.get('addressesFormGroups') as FormArray
   }
 }
