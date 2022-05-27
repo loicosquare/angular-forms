@@ -1,7 +1,7 @@
 <div class="card">
   <div class="card-header text-white bg-info">S'enregistrer</div>
   <div class="card-body">
-    <form novalidate (ngSubmit)="saveData()" [formGroup]="registerForm">
+    <form novalidate (ngSubmit)="saveData(registerForm)" #registerForm="ngForm">
       <div class="row">
         <div class="col-md-6 mb-3">
           <label>Nom</label>
@@ -9,18 +9,18 @@
             type="text"
             class="form-control"
             placeholder="Nom"
-            formControlName="lastName"
+            [(ngModel)]="user.lastName"
+            name="lastName"
+            required
+            minlength="4"
+            #lastNameVar="ngModel"
             [ngClass]="{
-              'is-invalid':
-                registerForm.get('lastName')?.touched &&
-                !registerForm.get('lastName')?.valid
+              'is-invalid': lastNameVar.touched && !lastNameVar.valid
             }"
           />
           <div class="invalid-feedback">
-            <span *ngIf="registerForm.get('lastName')?.errors?.required"
-              >Entrez votre nom!</span
-            >
-            <span *ngIf="registerForm.get('lastName')?.errors?.minlength"
+            <span *ngIf="lastNameVar.errors?.required">Entrez votre nom!</span>
+            <span *ngIf="lastNameVar.errors?.minlength"
               >Minimum 4 caratcères!</span
             >
           </div>
@@ -31,18 +31,20 @@
             type="text"
             class="form-control"
             placeholder="Prenom"
-            formControlName="firstName"
+            [(ngModel)]="user.firstName"
+            name="fistName"
+            required
+            maxlength="20"
+            #firstNameVar="ngModel"
             [ngClass]="{
-              'is-invalid':
-                registerForm.get('firstName')?.touched &&
-                !registerForm.get('lastName')?.valid
+              'is-invalid': firstNameVar.touched && !firstNameVar.valid
             }"
           />
           <div class="invalid-feedback">
-            <span *ngIf="registerForm.get('lastName')?.errors?.required"
+            <span *ngIf="firstNameVar.errors?.required"
               >Entrez votre prenom!</span
             >
-            <span *ngIf="registerForm.get('lastName')?.errors?.maxlength"
+            <span *ngIf="firstNameVar.errors?.maxlength"
               >Minimum 4 caratcères!</span
             >
           </div>
@@ -55,53 +57,19 @@
             type="email"
             class="form-control"
             placeholder="E-mail"
-            formControlName="email"
+            [(ngModel)]="user.email"
+            name="email"
+            required
+            email
+            #emailVar="ngModel"
             [ngClass]="{
-              'is-invalid':
-                registerForm.get('email')?.touched &&
-                !registerForm.get('email')?.valid
+              'is-invalid': emailVar.touched && !emailVar.valid
             }"
           />
           <div class="invalid-feedback">
-            <span *ngIf="registerForm.get('email')?.errors?.required"
-              >Entrez votre email!</span
-            >
-            <span *ngIf="registerForm.get('email')?.errors?.email"
-              >Email non valide!</span
-            >
+            <span *ngIf="emailVar.errors?.required">Entrez votre email!</span>
+            <span *ngIf="emailVar.errors?.email">Email non valide!</span>
           </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 mb-3">
-          <label for="phoneId">Télpéphone</label>
-          <input
-            type="tel"
-            class="form-control"
-            placeholder="Numéro de téléphone"
-          />
-        </div>
-        <div class="col-md-6 mb-3">
-          <label for="">Recevoir les notifications</label>
-          <div class="col-md-8">
-            <div class="form-check form-check-inline">
-              <label for="" class="form-check-label">
-                <input type="radio" class="form-check-input" />
-                Email
-              </label>
-            </div>
-            <div class="form-check form-check-inline">
-              <label for="" class="form-check-label">
-                <input type="radio" class="form-check-input" />
-                Téléphone
-              </label>
-            </div>
-          </div>
-          <input
-            type="tel"
-            class="form-control"
-            placeholder="Numéro de téléphone"
-          />
         </div>
       </div>
       <div class="row mb-3">
@@ -111,7 +79,8 @@
             <input
               type="checkbox"
               class="form-check-input"
-              formControlName="sendCatalog"
+              [(ngModel)]="user.sendCatalog"
+              name="sendCatalog"
             />
             Oui je souhaite recevoir la pub!
           </div>
@@ -152,9 +121,6 @@
         </div>
       </div>
       <div class="float-end">
-        <button class="btn btn-outline-info mr-3" (click)="fillFormData()">
-          Remplir les champs par défaut.
-        </button>
         <button
           class="btn btn-info text-white"
           type="submit"
@@ -169,5 +135,3 @@
 <hr />
 
 <p>Dirty {{ registerForm.dirty }}</p>
-<p>Valeurs du formulaires:</p>
-<pre>{{ registerForm.value | json }}</pre>
