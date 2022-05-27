@@ -4,14 +4,27 @@ import { FormGroup, FormBuilder, Validator, Validators, AbstractControl, Validat
 import { User } from './user';
 
 function ratingRangeValidator(min: number, max:number): ValidatorFn {
-return (c: AbstractControl): { [key: string]: boolean } |  null => {
-  if(!!c.value && (isNaN(c.value) || c.value < min || c.value > max)) {
-    return { 'rangeError': true};
+  return (c: AbstractControl): { [key: string]: boolean } |  null => {
+    if(!!c.value && (isNaN(c.value) || c.value < min || c.value > max)) {
+      return { 'rangeError': true};
+    }
+    return null;
   }
-  return null;
-}
 }
 
+function emailMatcher(c: AbstractControl): { [key: string]: boolean } |  null {
+  const emailControl = c.get('email');
+  const emailConfirmControl = c.get('confirmEmail');
+
+  if(emailControl?.pristine === emailConfirmControl?.pristine){
+    return null;
+  }
+
+  if(emailControl?.value === emailConfirmControl?.value){
+    return null;
+  }
+  return { 'match': true};
+}
 
 @Component({
   selector: 'app-register',
@@ -40,10 +53,18 @@ export class RegisterComponent implements OnInit {
       firstName: ['', [Validators.required, Validators.maxLength(20)]],
       lastName: ['', [Validators.required, Validators.minLength(4)]],
       phone: '',
+      emailGroup: this.fb.group({
+        email: ['', [Validators.required, Validators.email]],
+        confirmEmail: ['', [Validators.required]]
+      }),
       notification: 'email',
       rating: [null, [ratingRangeValidator]],
-      email: ['', [Validators.required, Validators.email]],
       sendCatalog: false
+    })
+
+    this.registerForm.get('notification')?.valueChanges.subscribe(value => {
+      this.setNotificationSetting(value);
+      console.log(value);
     })
   }
 
@@ -62,7 +83,7 @@ export class RegisterComponent implements OnInit {
     })
   }
 
-  public setNorificationSetting(method:string):void{
+  public setNotificationSetting(method:string):void{
     const phoneControl =  this.registerForm.get('phone');
     if (method === 'text') {
       phoneControl?.setValidators(Validators.required);
