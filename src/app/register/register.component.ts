@@ -29,6 +29,8 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.fb.group({
       firstName: ['', [Validators.required, Validators.maxLength(20)]],
       lastName: ['', [Validators.required, Validators.minLength(4)]],
+      phone: '',
+      notification: 'email',
       email: ['', [Validators.required, Validators.email]],
       sendCatalog: false
     })
@@ -41,12 +43,22 @@ export class RegisterComponent implements OnInit {
   }
 
   public fillFormData(){
-    this.registerForm.setValue({ //utiliser patchValue si on ne veut pas remplir toutes les valeurs du formulaire.
+    this.registerForm.patchValue({ //utiliser patchValue si on ne veut pas remplir toutes les valeurs du formulaire.
       firstName: 'Loico',
       lastName: 'Square',
       email: 'Loicsan07@gmail.com',
       sendCatalog: true
     })
+  }
+
+  public setNorificationSetting(method:string):void{
+    const phoneControl =  this.registerForm.get('phone');
+    if (method === 'text') {
+      phoneControl?.setValidators(Validators.required);
+    } else {
+      phoneControl?.clearValidators();
+    }
+    phoneControl?.updateValueAndValidity();
   }
 
 }

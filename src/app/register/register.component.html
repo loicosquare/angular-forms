@@ -79,29 +79,48 @@
             type="tel"
             class="form-control"
             placeholder="Numéro de téléphone"
+            formControlName="phone"
+            [ngClass]="{ 'is-invalid': !registerForm.get('phone')?.valid }"
           />
+          <div class="invalid-feedback">
+            <span *ngIf="registerForm.get('phone')?.errors"
+              >Veuillez entrer votre numéro de téléphone!</span
+            >
+          </div>
         </div>
         <div class="col-md-6 mb-3">
           <label for="">Recevoir les notifications</label>
           <div class="col-md-8">
             <div class="form-check form-check-inline">
               <label for="" class="form-check-label">
-                <input type="radio" class="form-check-input" />
+                <input
+                  type="radio"
+                  value="email"
+                  class="form-check-input"
+                  formControlName="notification"
+                  (click)="setNorificationSetting('email')"
+                />
                 Email
               </label>
             </div>
             <div class="form-check form-check-inline">
               <label for="" class="form-check-label">
-                <input type="radio" class="form-check-input" />
-                Téléphone
+                <input
+                  type="radio"
+                  value="text"
+                  class="form-check-input"
+                  formControlName="notification"
+                  (click)="setNorificationSetting('text')"
+                />
+                Texte
               </label>
             </div>
           </div>
-          <input
+          <!-- <input
             type="tel"
             class="form-control"
             placeholder="Numéro de téléphone"
-          />
+          /> -->
         </div>
       </div>
       <div class="row mb-3">
